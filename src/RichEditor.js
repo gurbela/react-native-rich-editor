@@ -254,6 +254,12 @@ export default class RichTextEditor extends Component {
     let that = this;
     const {html, editorStyle, useContainer, style, onLink, ...rest} = that.props;
     const {html: viewHTML} = that.state;
+
+    const injectedJavaScript = `
+      document.querySelector('[contenteditable]').setAttribute('spellcheck', 'true');
+      document.querySelector('[contenteditable]').setAttribute('autocorrect', 'on');
+      `;
+    
     return (
       <>
         <WebView
@@ -281,8 +287,9 @@ export default class RichTextEditor extends Component {
             }
             return true;
           }}
+         injectedJavaScript={injectedJavaScript}
         />
-        {Platform.OS === 'android' && <TextInput ref={ref => (that._input = ref)} style={styles._input} />}
+        {Platform.OS === 'android' && <TextInput ref={ref => (that._input = ref)} style={styles._input} autoCorrect={true} spellCheck={true} />}
       </>
     );
   }
